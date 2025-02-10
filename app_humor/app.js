@@ -65,4 +65,3 @@ document.addEventListener("DOMContentLoaded", () => {
                 songsList.innerHTML = `<li>Erro ao carregar playlists: ${error.message}</li>`;
             });
     }
-});
