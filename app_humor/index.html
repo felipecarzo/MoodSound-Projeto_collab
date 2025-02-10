@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoodSound</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 MoodSound</h1>
+        <p>Selecione seu humor e descubra músicas para combinar com ele!</p>
+        
+        <div class="moods">
+            <button class="mood" data-mood="happy">😃 Feliz</button>
+            <button class="mood" data-mood="sad">😢 Triste</button>
+            <button class="mood" data-mood="relaxed">😌 Relaxado</button>
+            <button class="mood" data-mood="energetic">⚡ Energético</button>
+        </div>
+
+        <div id="playlist">
+            <h2>🎶 Sua Playlist</h2>
+            <ul id="songs-list"></ul>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
