@@ -5,11 +5,11 @@ document.addEventListener("DOMContentLoaded", () => {
     moodButtons.forEach(button => {
         button.addEventListener("click", () => {
             const mood = button.getAttribute("data-mood");
-            fetchSongsFromBackend(mood);
+            fetchPlaylistsFromBackend(mood);
         });
     });
 
-    function fetchSongsFromBackend(mood) {
+    function fetchPlaylistsFromBackend(mood) {
         songsList.innerHTML = "<li>Carregando...</li>";
         
         const moodQuery = {
@@ -20,7 +20,10 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         const query = moodQuery[mood] || "pop";
-        const url = `http://localhost:3000/search?query=${query}`;
+        const url = `http://localhost:4000/search?query=${query}`;
+
+        console.log("🔍 Buscando playlists para:", query);
+        console.log("📡 URL da requisição:", url);
 
         fetch(url)
             .then(response => {
@@ -30,32 +33,36 @@ document.addEventListener("DOMContentLoaded", () => {
                 return response.json();
             })
             .then(data => {
+                console.log("📥 Dados recebidos da API Spotify:", data);
+
                 songsList.innerHTML = "";
-                if (data && data.data && data.data.length > 0) {
-                    data.data.slice(0, 5).forEach(track => {
-                        const li = document.createElement("li");
-                        li.innerHTML = `
-                            <img src="${track.album.cover_small}" alt="Album Cover">
-                            <div>
-                                <strong>${track.artist.name}</strong> - ${track.title}
-                                <br>
-                                <audio controls>
-                                    <source src="${track.preview}" type="audio/mpeg">
-                                    Seu navegador não suporta a reprodução de áudio.
-                                </audio>
-                                <br>
-                                <a href="${track.link}" target="_blank">🔗 Ouça no Deezer</a>
-                            </div>
-                        `;
-                        songsList.appendChild(li);
-                    });
+                if (data?.playlists?.items?.length > 0) {
+                    data.playlists.items
+                        .filter(playlist => playlist !== null) // 🔹 Filtra playlists nulas
+                        .slice(0, 5)
+                        .forEach(playlist => {
+                            console.log("🎵 Playlist encontrada:", playlist);
+
+                            const imageUrl = playlist.images?.[0]?.url || "https://via.placeholder.com/100";
+
+                            const li = document.createElement("li");
+                            li.innerHTML = `
+                                <img src="${imageUrl}" alt="Playlist Cover" width="100">
+                                <div>
+                                    <strong>${playlist.name}</strong>
+                                    <br>
+                                    <a href="${playlist.external_urls.spotify}" target="_blank">🎵 Ouça no Spotify</a>
+                                </div>
+                            `;
+                            songsList.appendChild(li);
+                        });
                 } else {
-                    songsList.innerHTML = "<li>Nenhuma música encontrada.</li>";
+                    songsList.innerHTML = "<li>Nenhuma playlist encontrada.</li>";
                 }
             })
             .catch(error => {
-                console.error("Erro ao buscar músicas:", error);
-                songsList.innerHTML = `<li>Erro ao carregar músicas: ${error.message}</li>`;
+                console.error("❌ Erro ao buscar playlists:", error);
+                songsList.innerHTML = `<li>Erro ao carregar playlists: ${error.message}</li>`;
             });
     }
 });
