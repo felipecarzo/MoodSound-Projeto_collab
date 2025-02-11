@@ -4,11 +4,18 @@ const axios = require("axios");
 const querystring = require("querystring");
 
 const app = express();
+
+require("dotenv").config();
+const CLIENT_ID = process.env.CLIENT_ID;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
+
+
 const PORT = process.env.PORT || 4000;
 
+
 // 🔹 Insira seu CLIENT_ID e CLIENT_SECRET do Spotify
-const CLIENT_ID = "1cb9e81b95a744eaab8a5254cabfa953";
-const CLIENT_SECRET = "7e7e4b566f5f4c2a9d5a2764abb16e67";
+// const CLIENT_ID = "";
+// const CLIENT_SECRET = "";
 const TOKEN_URL = "https://accounts.spotify.com/api/token";
 const SPOTIFY_API_URL = "https://api.spotify.com/v1";
 
